@@ -20,7 +20,7 @@ class ItemTest(private val itemRepository: ItemRepository) : FunSpec({
         val savedItem: Item = itemRepository.save(item)
 
         //then
-        val findItem: Item = itemRepository.findById(item.id!!).get()
+        val findItem: Item = itemRepository.findById(item.id!!)!!
         assertThat(findItem).isEqualTo(savedItem)
     }
 
@@ -35,7 +35,7 @@ class ItemTest(private val itemRepository: ItemRepository) : FunSpec({
         itemRepository.update(itemId!!, updateParam)
 
         //then
-        val findItem = itemRepository.findById(itemId!!).get()
+        val findItem = itemRepository.findById(itemId)!!
         assertThat(findItem.itemName).isEqualTo(updateParam.itemName)
         assertThat(findItem.price).isEqualTo(updateParam.price)
         assertThat(findItem.quantity).isEqualTo(updateParam.quantity)

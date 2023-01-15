@@ -5,7 +5,6 @@ import hello.itemservice.repository.ItemRepository
 import hello.itemservice.repository.ItemSearchCond
 import hello.itemservice.repository.ItemUpdateDto
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class ItemServiceV1(private val itemRepository: ItemRepository) : ItemService {
@@ -17,7 +16,7 @@ class ItemServiceV1(private val itemRepository: ItemRepository) : ItemService {
         itemRepository.update(itemId, updateParam)
     }
 
-    override fun findById(id: Long): Optional<Item> {
+    override fun findById(id: Long): Item? {
         return itemRepository.findById(id)
     }
 

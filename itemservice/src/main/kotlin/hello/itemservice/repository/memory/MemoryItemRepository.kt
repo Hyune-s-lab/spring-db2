@@ -5,7 +5,6 @@ import hello.itemservice.repository.ItemRepository
 import hello.itemservice.repository.ItemSearchCond
 import hello.itemservice.repository.ItemUpdateDto
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
 class MemoryItemRepository : ItemRepository {
@@ -16,20 +15,21 @@ class MemoryItemRepository : ItemRepository {
     }
 
     override fun update(itemId: Long, updateParam: ItemUpdateDto) {
-        val findItem: Item = findById(itemId).orElseThrow()
+        val findItem: Item = findById(itemId) ?: throw RuntimeException("찾을 수 없는 entity")
+
         findItem.itemName = updateParam.itemName
         findItem.price = updateParam.price
         findItem.quantity = updateParam.quantity
     }
 
-    override fun findById(id: Long): Optional<Item> {
-        return Optional.ofNullable<Item>(store[id])
+    override fun findById(id: Long): Item? {
+        return store[id]
     }
 
     override fun findAll(cond: ItemSearchCond): List<Item> {
         val itemName: String? = cond.itemName
         val maxPrice: Int? = cond.maxPrice
-        return store.values.stream()
+        return store.values
             .filter { item: Item ->
                 itemName == null || item.itemName.contains(itemName)
             }.filter { item: Item ->
@@ -42,7 +42,7 @@ class MemoryItemRepository : ItemRepository {
     }
 
     companion object {
-        private val store: MutableMap<Long, Item> = HashMap<Long, Item>() // static
-        private var sequence = 0L // static
+        private val store: MutableMap<Long, Item> = HashMap<Long, Item>()
+        private var sequence = 0L
     }
 }

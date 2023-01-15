@@ -25,7 +25,7 @@ class ItemController(private val itemService: ItemService) {
 
     @GetMapping("/{itemId}")
     fun item(@PathVariable itemId: Long, model: Model): String {
-        val item: Item = itemService.findById(itemId).get()
+        val item: Item? = itemService.findById(itemId)
         model.addAttribute("item", item)
         return "item"
     }
@@ -45,7 +45,7 @@ class ItemController(private val itemService: ItemService) {
 
     @GetMapping("/{itemId}/edit")
     fun editForm(@PathVariable itemId: Long, model: Model): String {
-        val item: Item = itemService.findById(itemId).get()
+        val item: Item? = itemService.findById(itemId)
         model.addAttribute("item", item)
         return "editForm"
     }
