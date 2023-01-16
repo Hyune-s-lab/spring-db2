@@ -30,6 +30,12 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtVersion")
+
+    // JdbcTemplate 추가
+	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+
+    //H2 데이터베이스 추가
+    runtimeOnly("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {
