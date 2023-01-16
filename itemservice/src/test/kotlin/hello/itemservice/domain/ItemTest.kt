@@ -9,7 +9,9 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @SpringBootTest
 class ItemTest(private val itemRepository: ItemRepository) : FunSpec({
     test("save") {
