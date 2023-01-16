@@ -14,22 +14,26 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 class ItemTest(private val itemRepository: ItemRepository) : FunSpec({
+    val item1 = Item("itemA", 10000, 10)
+    var item2 = Item("item1", 10000, 10)
+    val item3 = Item("itemA-1", 10000, 10)
+    val item4 = Item("itemA-2", 20000, 20)
+    val item5 = Item("itemB-1", 30000, 30)
+
     test("save") {
         //given
-        val item = Item("itemA", 10000, 10)
 
         //when
-        val savedItem: Item = itemRepository.save(item)
+        val savedItem: Item = itemRepository.save(item1)
 
         //then
-        val findItem: Item = itemRepository.findById(item.id!!)!!
+        val findItem: Item = itemRepository.findById(item1.id!!)!!
         assertThat(findItem).isEqualTo(savedItem)
     }
 
     test("updateItem") {
         //given
-        val item = Item("item1", 10000, 10)
-        val savedItem = itemRepository.save(item)
+        val savedItem = itemRepository.save(item2)
         val itemId = savedItem.id
 
         //when
@@ -41,32 +45,29 @@ class ItemTest(private val itemRepository: ItemRepository) : FunSpec({
         assertThat(findItem.itemName).isEqualTo(updateParam.itemName)
         assertThat(findItem.price).isEqualTo(updateParam.price)
         assertThat(findItem.quantity).isEqualTo(updateParam.quantity)
+        item2 = findItem
     }
 
     test("findItems") {
         //given
-        val item1 = Item("itemA-1", 10000, 10)
-        val item2 = Item("itemA-2", 20000, 20)
-        val item3 = Item("itemB-1", 30000, 30)
-
-        itemRepository.save(item1)
-        itemRepository.save(item2)
         itemRepository.save(item3)
+        itemRepository.save(item4)
+        itemRepository.save(item5)
 
         //둘 다 없음 검증
-        test(itemRepository, null, null, item1, item2, item3)
-        test(itemRepository, "", null, item1, item2, item3)
+        test(itemRepository, null, null, item1, item2, item3, item4, item5)
+        test(itemRepository, "", null, item1, item2, item3, item4, item5)
 
         //itemName 검증
-        test(itemRepository, "itemA", null, item1, item2)
-        test(itemRepository, "temA", null, item1, item2)
-        test(itemRepository, "itemB", null, item3)
+        test(itemRepository, "itemA", null, item1, item3, item4)
+        test(itemRepository, "temA", null, item1, item3, item4)
+        test(itemRepository, "itemB", null, item5)
 
         //maxPrice 검증
-        test(itemRepository, null, 10000, item1)
+        test(itemRepository, null, 10000, item1, item3)
 
         //둘 다 있음 검증
-        test(itemRepository, "itemA", 10000, item1)
+        test(itemRepository, "itemA", 10000, item1, item3)
     }
 }) {
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
