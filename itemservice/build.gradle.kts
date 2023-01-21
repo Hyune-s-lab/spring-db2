@@ -32,7 +32,10 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtVersion")
 
     // JdbcTemplate 추가
-	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+//    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+
+    //JPA, 스프링 데이터 JPA 추가
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     //H2 데이터베이스 추가
     runtimeOnly("com.h2database:h2")
