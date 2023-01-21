@@ -1,11 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.0.1"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
-    kotlin("plugin.jpa") version "1.7.22"
+    id("org.springframework.boot") version "2.7.3"
+    id("io.spring.dependency-management") version "1.0.13.RELEASE"
+
+    val kotlinVersion = "1.7.22"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    kotlin("plugin.allopen") version kotlinVersion
+    idea
 }
 
 group = "hello"
@@ -17,9 +23,9 @@ repositories {
 }
 
 allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
 }
 
 val kotestVersion = "5.5.4"
@@ -46,6 +52,10 @@ dependencies {
 
     //H2 데이터베이스 추가
     runtimeOnly("com.h2database:h2")
+
+    //Querydsl 추가
+    implementation("com.querydsl:querydsl-jpa:5.0.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 }
 
 tasks.withType<KotlinCompile> {
@@ -57,4 +67,12 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+idea {
+    module {
+        val kaptMain = file("build/generated/source/kapt/main")
+        sourceDirs.add(kaptMain)
+        generatedSourceDirs.add(kaptMain)
+    }
 }
