@@ -1,10 +1,19 @@
 package hello.itemservice.domain
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+
+@Entity
 data class Item(
-    var id: Long? = null,
+    @Column(name = "item_name", length = 10)
     var itemName: String = "",
     var price: Int = 0,
-    var quantity: Int = 0,
+    var quantity: Int = 0
 ) {
-    constructor(itemName: String, price: Int, quantity: Int) : this(null, itemName, price, quantity)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
 }
