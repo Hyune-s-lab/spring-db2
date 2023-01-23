@@ -5,14 +5,10 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-class Log {
+class Log(
+    var message: String = ""
+) {
     @Id
     @GeneratedValue
     val id: Long? = null
-    var message: String = ""
-
-    constructor()
-    constructor(message: String) {
-        this.message = message
-    }
 }

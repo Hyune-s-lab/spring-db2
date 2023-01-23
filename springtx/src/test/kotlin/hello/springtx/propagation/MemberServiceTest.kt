@@ -1,27 +1,23 @@
 package hello.springtx.propagation
 
 import io.kotest.core.spec.style.FunSpec
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.UnexpectedRollbackException
 
 @SpringBootTest
 internal class MemberServiceTest(
-    val memberService: MemberService,
-
-    val memberRepository: MemberRepository,
-    val logRepository: LogRepository
+    private val memberService: MemberService,
+    private val memberRepository: MemberRepository,
+    private val logRepository: LogRepository
 ) : FunSpec({
-
-
     /**
      * memberService    @Transactional:OFF
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON
      */
-    @Test
-    fun outerTxOff_success() {
+    test("outerTxOff_success()") {
         //given
         val username = "outerTxOff_success"
 
@@ -38,13 +34,12 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON Exception
      */
-    @Test
-    fun outerTxOff_fail() {
+    test("outerTxOff_fail()") {
         //given
         val username = "로그예외_outerTxOff_fail"
 
         //when
-        org.assertj.core.api.Assertions.assertThatThrownBy { memberService.joinV1(username) }
+        assertThatThrownBy { memberService.joinV1(username) }
             .isInstanceOf(RuntimeException::class.java)
 
         //when: log 데이터는 롤백된다.
@@ -57,8 +52,7 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:OFF
      * logRepository    @Transactional:OFF
      */
-    @Test
-    fun singleTx() {
+    test("singleTx()") {
         //given
         val username = "singleTx"
 
@@ -75,8 +69,7 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON
      */
-    @Test
-    fun outerTxOn_success() {
+    test("outerTxOn_success()") {
         //given
         val username = "outerTxOn_success"
 
@@ -93,13 +86,12 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON Exception
      */
-    @Test
-    fun outerTxOn_fail() {
+    test("outerTxOn_fail()") {
         //given
         val username = "로그예외_outerTxOn_fail"
 
         //when
-        org.assertj.core.api.Assertions.assertThatThrownBy { memberService.joinV1(username) }
+        assertThatThrownBy { memberService.joinV1(username) }
             .isInstanceOf(RuntimeException::class.java)
 
         //when: 모든 데이터가 롤백된다.
@@ -112,13 +104,12 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON Exception
      */
-    @Test
-    fun recoverException_fail() {
+    test("recoverException_fail()") {
         //given
         val username = "로그예외_recoverException_fail"
 
         //when
-        org.assertj.core.api.Assertions.assertThatThrownBy { memberService.joinV2(username) }
+        assertThatThrownBy { memberService.joinV2(username) }
             .isInstanceOf(UnexpectedRollbackException::class.java)
 
         //when: 모든 데이터가 롤백된다.
@@ -131,8 +122,7 @@ internal class MemberServiceTest(
      * memberRepository @Transactional:ON
      * logRepository    @Transactional:ON(REQUIRES_NEW) Exception
      */
-    @Test
-    fun recoverException_success() {
+    test("recoverException_success()") {
         //given
         val username = "로그예외_recoverException_success"
 

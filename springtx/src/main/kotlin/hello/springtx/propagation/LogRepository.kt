@@ -9,7 +9,6 @@ import javax.persistence.EntityManager
 
 @Repository
 class LogRepository(private val em: EntityManager) {
-
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
